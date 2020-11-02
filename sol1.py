@@ -15,8 +15,9 @@ grad = np.tile(x,(256,1))
 def read_image(filename, representation):
     #the function will read an image file and return a normalizes array of
     # its intesitys
-    image=im.imread(filename)
-    image=image.astype(np.float64)/MAX_PIXEL
+    image=im.imread(filename).astype(np.float64)
+    if np.amax(image)>1:
+        image=image.astype(np.float64)/MAX_PIXEL
     if representation==1 and image.ndim!=GRAY_SCALE:#return RGB from RGB file
         return image
     elif representation==2 and image.ndim==RGB:#return grayscale from RGB file
