@@ -1,4 +1,8 @@
 if there is a segment of all zero pixels,there will be a divition by zero.
 the q_i formula calculate the mean value of z at z_i,z_i+1 region',if all of it is zeros,it will apply 0/0 wich is not defined by the computer.
 further more'if we choose to deffine it as 0,and from that q_i=0,this current value of q will not be between z_0-z_1.
+<<<<<<< HEAD
 from all this reasons the algorithem will crash.
+=======
+from all this reasons the algorithem will crash.
+>>>>>>> bbb95604606ac1d04b835612c3f828a62587252f

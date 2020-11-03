@@ -19,7 +19,11 @@ def read_image(filename, representation):
     image=im.imread(filename).astype(np.float64)
     if np.amax(image)>1:
         image=image.astype(np.float64)/MAX_PIXEL
+<<<<<<< HEAD
     if representation==2 and image.ndim!=GRAY_SCALE:#return RGB from RGB file
+=======
+    if representation==1 and image.ndim!=GRAY_SCALE:#return RGB from RGB file
+>>>>>>> bbb95604606ac1d04b835612c3f828a62587252f
         return image
     elif representation==1 and image.ndim==RGB:#return grayscale from RGB file
         return rgb2gray(image)
@@ -195,3 +199,9 @@ def z_bounds(hist, n_quant):
             j+=1
     return np.array(z_i_list),hist_cum.max()
 
+<<<<<<< HEAD
+=======
+for im in images:
+    # change "False" to "True" if you wish to add the bonus task to the print
+    display_all(im[0], False)
+>>>>>>> bbb95604606ac1d04b835612c3f828a62587252f
