@@ -193,3 +193,57 @@ def z_bounds(hist, n_quant):
             z_i_list.append(i)
             j+=1
     return np.array(z_i_list),hist_cum.max()
+###bonus
+def quantize_rgb(im_orig, n_quant):
+    img_array = []
+    im_orig=(im_orig*MAX_PIXEL).astype('uint8')
+    quantize_image = im_orig
+    for rindex, rows in enumerate(im_orig):
+        for cindex, color in enumerate(rows):
+            img_array.append([color[0], color[1], color[2], rindex, cindex])
+    img_array = np.array(img_array)
+    # start the splitting process
+    depth=int(mt.log2(n_quant))
+    bocket_split(quantize_image, img_array, depth)
+    return (quantize_image/MAX_PIXEL).astype('float64')
+
+
+
+def median_cut_quantize(quantize_image, img_array):
+    # when it reaches the end, color quantize
+    r_avg = np.mean(img_array[:, 0])
+    g_avg = np.mean(img_array[:, 1])
+    b_avg = np.mean(img_array[:, 2])
+    for data in img_array:
+        quantize_image[data[3]][data[4]] = [r_avg, g_avg, b_avg]
+    return quantize_image
+
+
+def bocket_split(img, img_arr, depth):
+    #splits the image array to buckets
+    if len(img_arr) == 0:#base case
+        return
+    if depth == 0:#base case
+        median_cut_quantize(img, img_arr)
+        return
+    #calculate the range of the channels
+    r_range = np.max(img_arr[:, 0]) - np.min(img_arr[:, 0])
+    g_range = np.max(img_arr[:, 1]) - np.min(img_arr[:, 1])
+    b_range = np.max(img_arr[:, 2]) - np.min(img_arr[:, 2])
+    #find the color with the max range,for the sorting
+    space_with_highest_range = 0
+    if g_range >= r_range and g_range >= b_range:
+        space_with_highest_range = 1
+    elif b_range >= r_range and b_range >= g_range:
+        space_with_highest_range = 2
+    elif r_range >= b_range and r_range >= g_range:
+        space_with_highest_range = 0
+
+    # sort the image pixels by color space with highest range
+    # and find the median and divide the array.
+    img_arr = img_arr[img_arr[:, space_with_highest_range].argsort()]
+    median_index = int((len(img_arr) + 1) / 2)
+
+    # split the array into two blocks,the recursiv step
+    bocket_split(img, img_arr[0:median_index], depth - 1)#go left
+    bocket_split(img, img_arr[median_index:], depth - 1)#go right
