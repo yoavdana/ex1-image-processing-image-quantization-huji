@@ -196,7 +196,6 @@ def z_bounds(hist, n_quant):
 ###bonus
 def quantize_rgb(im_orig, n_quant):
     img_array = []
-    im_orig=(im_orig*MAX_PIXEL).astype('uint8')
     quantize_image = im_orig
     for rindex, rows in enumerate(im_orig):
         for cindex, color in enumerate(rows):
